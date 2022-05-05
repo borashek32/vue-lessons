@@ -1,0 +1,24 @@
+<template>
+  <div>
+    <button class="btn">
+      <slot></slot>
+    </button>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'my-button'
+}
+</script>
+
+<style scoped>
+.btn {
+  align-self: flex-start;
+  padding: 10px 15px;
+  background: none;
+  color: teal;
+  border: 1px solid teal;
+  cursor: pointer;
+}
+</style>

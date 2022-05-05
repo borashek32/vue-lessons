@@ -1,47 +1,36 @@
 <template>
   <div class="app">
-    <form @submit.prevent>
-      <h4>Create post</h4>
-      <input 
-        v-bind:value="title" 
-        @input="title = $event.target.value"
-        class="input" 
-        type="text" 
-        placeholder="Title"
-      >
-      <input 
-        v-bind:value="body" 
-        @input="body = $event.target.value"
-        class="input" 
-        type="text" 
-        placeholder="Description"
-      >
-      <button 
-        class="btn" 
-        @click="createPost"
-      >
-        Save
-      </button>
-    </form>
+    <h3>Posts list</h3>
 
-    <div class="post" 
-      v-for="post in posts" 
-      v-bind:key="post"
+    <my-button
+      style="margin:15px 0"
+      @click="showDialog"
     >
-      <div>
-        <strong>Title:</strong>
-        {{ post.title }}
-      </div>
-      <div>
-        <strong>Description:</strong>
-        {{ post.body }}
-      </div>
-    </div>
+      Create post
+    </my-button>
+
+    <my-dialog v-model:show="dialogVisible">
+      <post-form 
+        @create="createPost"
+      />
+    </my-dialog>
+    
+    <post-list 
+      :posts="posts" 
+      @remove="removePost"
+    />
   </div>
 </template>
 
 <script>
+import PostList from './components/PostList'
+import PostForm from './components/PostForm'
+
 export default {
+  components: {
+    PostList, 
+    PostForm
+  },
   data() {
     return {
       posts: [
@@ -49,20 +38,19 @@ export default {
         {id: 2, title: 'Post2', body: 'description2'},
         {id: 3, title: 'Post3', body: 'description3'}
       ],
-      title: '',
-      body: '',
+      dialogVisible: false
     }
   },
   methods: {
-    createPost() {
-      const newPost = {
-        id: Date.now(),
-        title: this.title,
-        body: this.body
-      }
-      this.posts.push(newPost);
-      this.title ='';
-      this.body = '';
+    createPost(post) {
+      this.posts.push(post);
+      this.dialogVisible = false;
+    },
+    removePost(post) {
+      this.posts = this.posts.filter(p => p.id !== post.id);
+    },
+    showDialog() {
+      this.dialogVisible = true;
     }
   }
 }
@@ -70,39 +58,16 @@ export default {
 
 <style scoped>
 * {
- margin: 0;
- padding: 0;
- box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .app {
   padding: 15px;
 }
 
-.post {
-  padding: 15px;
-  border: 2px solid teal;
-  margin-top: 15px;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.btn {
-  align-self: flex-end;
-  margin-top: 15px;
-  padding: 10px 15px;
-  background: none;
-  color: teal;
-  border: 1px solid teal;
-}
-
-.input {
-  width: 100%;
-  border: 2px solid teal;
-  padding: 10px 15px;
-  margin-top: 15px;
+body {
+  margin: 0;
 }
 </style>
