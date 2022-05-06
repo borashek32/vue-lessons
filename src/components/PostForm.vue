@@ -7,11 +7,13 @@
         type="text" 
         placeholder="Title"
       ></my-input>
+      
       <my-input 
         v-model="post.body"
         type="text" 
         placeholder="Description"
       ></my-input>
+
       <my-button 
         @click="createPost"
       >
